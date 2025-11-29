@@ -37,7 +37,11 @@ app.get('/api/weather', async (req, res) => {
         // ส่วนที่ 1: ดึงสภาพอากาศ (Critical - ห้ามพัง)
         let weatherData = null;
         try {
-            const weatherRes = await axios.get(weatherUrl);
+            const weatherRes = await axios.get(weatherUrl, {
+                headers: {
+                    'User-Agent': 'StudentProjectWeatherApp/1.0' // ชื่ออะไรก็ได้ให้ดูไม่ใช่อัตโนมัติ
+                }
+            });
             weatherData = weatherRes.data;
         } catch (err) {
             console.error("Weather API Error:", err.message);
