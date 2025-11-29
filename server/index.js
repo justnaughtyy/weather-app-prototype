@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Endpoint หลัก: รับ Lat/Lon คืนค่า Weather + ชื่อเมือง
 app.get('/api/weather', async (req, res) => {
@@ -83,5 +83,5 @@ app.get('/api/weather', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
