@@ -68,9 +68,22 @@ export default function Home() {
 
     try {
       const res = await axios.get(`${API_URL}/api/weather?lat=${lat}&lon=${lon}`);
-      setData(res.data);
+      let finalData = res.data;
+      if (!finalData.weather) {
+        console.log("Backend failed to get weather, fetching from Client instead...");
+
+        // ยิง Open-Meteo โดยตรงจาก Browser (ไม่โดนแบนแน่นอน)
+        const weatherRes = await axios.get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`
+        );
+
+        // เอาข้อมูลมาแปะรวมกัน
+        finalData.weather = weatherRes.data;
+      }
+      setData(finalData);
     } catch (err) {
       console.error(err);
+      alert("เกิดข้อผิดพลาดในการดึงข้อมูล");
     } finally {
       setLoading(false);
     }

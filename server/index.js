@@ -38,14 +38,13 @@ app.get('/api/weather', async (req, res) => {
         let weatherData = null;
         try {
             const weatherRes = await axios.get(weatherUrl, {
-                headers: {
-                    'User-Agent': 'StudentProjectWeatherApp/1.0' // ชื่ออะไรก็ได้ให้ดูไม่ใช่อัตโนมัติ
-                }
+                headers: { 'User-Agent': 'StudentProjectWeatherApp/1.0' }
             });
             weatherData = weatherRes.data;
         } catch (err) {
-            console.error("Weather API Error:", err.message);
-            return res.status(500).json({ error: "Failed to fetch weather data" });
+            // 👇 แก้ตรงนี้: ถ้าพัง ไม่ต้อง throw 500 แต่ให้เป็น null พอ
+            console.error("Weather API Error (429/Blocked):", err.message);
+            weatherData = null;
         }
 
         // ส่วนที่ 2: ดึงชื่อสถานที่ (Non-Critical - พังได้)
