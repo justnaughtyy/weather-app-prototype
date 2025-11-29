@@ -72,9 +72,10 @@ export default function Home() {
       if (!finalData.weather) {
         console.log("Backend failed to get weather, fetching from Client instead...");
 
+        const normalizedLon = ((lon + 180) % 360 + 360) % 360 - 180;
         // ยิง Open-Meteo โดยตรงจาก Browser (ไม่โดนแบนแน่นอน)
         const weatherRes = await axios.get(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${normalizedLon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`
         );
 
         // เอาข้อมูลมาแปะรวมกัน
